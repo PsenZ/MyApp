@@ -1,6 +1,6 @@
-﻿yfinance
+yfinance
 pandas
 numpy
-pytz
 requests
 feedparser
+pytest
