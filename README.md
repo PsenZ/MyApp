@@ -1,83 +1,244 @@
 # ShortReport 量化交易助手
 
-ShortReport 是一个免费数据优先的半自动美股波段交易助手。系统通过 GitHub Actions 定时运行，扫描少量股票池，输出每日简报、机会提醒和明确交易计划，但不连接券商 API、不自动下单。
+ShortReport 是一个面向美股波段交易的半自动量化交易助手。它会定时扫描股票池，结合行情、技术指标、市场环境、新闻情绪、期权数据和风控预算，生成每日简报、机会提醒和可复核的交易计划。
 
-## 核心功能
+它不是自动交易机器人，也不会连接券商 API。ShortReport 的目标是帮助交易者更快回答三个问题：
 
-- 股票池扫描：使用 `SYMBOLS` 配置 5-20 个美股或 ETF，默认 `NVDA`。
-- 市场过滤：用 `SPY`、`QQQ`、`SMH`、`^VIX` 判断大盘、科技、半导体和波动率背景。
-- 分项评分：趋势、动量、相对强弱、成交量、期权/波动率、新闻情绪、事件风险、市场环境。
-- 信号类型：突破入场、趋势回踩加仓、持有观察、减仓/风险升高、禁止交易/等待。
-- 交易计划：入场区、失效位、止损、目标价、R 倍数、仓位比例、最大亏损占比、触发条件和取消条件。
-- 风控预算：单笔风险、单标的最大仓位、组合总风险暴露。
-- 数据降级：Yahoo Finance、RSS 或期权数据失败时优先使用缓存或降级输出，不让整次任务直接崩溃。
-- 状态管理：按 symbol 和 alert kind 记录提醒冷却、信号 hash 和交易计划摘要。
+- 现在市场环境是否适合进攻？
+- 哪些标的最值得关注？
+- 如果要交易，入场区、止损、目标位和仓位应该如何规划？
+
+## 核心亮点
+
+### 1. 股票池扫描
+
+通过 `SYMBOLS` 配置多个美股或 ETF，例如：
+
+```text
+NVDA,MSFT,AMD,SMH,QQQ
+```
+
+系统会为每个标的计算综合评分，并按优先级排序，避免只盯着单一股票做主观判断。
+
+### 2. 市场环境过滤
+
+ShortReport 不会只看个股信号。它会先读取市场背景：
+
+- `SPY`: 美股大盘风险偏好
+- `QQQ`: 科技股趋势
+- `SMH`: 半导体板块强度
+- `^VIX`: 市场波动压力
+
+当市场处于风险规避状态时，系统会降低入场信号的进攻性，避免在大盘环境不利时盲目追涨。
+
+### 3. 多维度分项评分
+
+每个标的都会拆成多个可解释评分项：
+
+- 趋势结构：均线、20/55 日高低点
+- 动量状态：RSI、MACD、ADX、DI
+- 相对强弱：个股相对 `SPY` / `QQQ` 的表现
+- 成交量确认：当前量能相对 20 日均量
+- 波动与期权：ATR、隐含波动率、Put/Call 比率
+- 新闻与情绪：公开 RSS、Google News、社媒标题代理情绪
+- 事件风险：基本面增长、分析师一致预期
+- 市场环境：大盘、科技、半导体、VIX 背景
+
+这样你看到的不只是一个分数，而是知道分数从哪里来。
+
+### 4. 明确交易计划
+
+当信号达到条件时，ShortReport 会输出完整交易计划：
+
+- 信号类型
+- 综合评分
+- 市场状态
+- 入场区间
+- 止损位置
+- 第一/第二目标位
+- 预期 R 倍数
+- 建议仓位比例
+- 最大亏损占账户比例
+- 触发条件
+- 取消条件
+- 主要理由
+- 主要风险
+
+示例字段：
+
+```text
+symbol: NVDA
+signal_type: 趋势回踩加仓
+score: 72
+market_regime: 风险偏好
+entry_zone: $904.20 - $916.80
+stop: $874.50
+targets: $952.00 / $988.40
+position_pct: 6.40%
+max_loss_pct: 0.50%
+```
+
+### 5. 风控优先
+
+ShortReport 默认采用保守风险参数：
+
+- 单笔风险：`0.5%`
+- 单标的最大仓位：`10%`
+- 组合总风险暴露上限：`3%`
+- ATR 止损倍数：`2.0`
+- 最低盈亏比：`1.5R`
+
+仓位不是拍脑袋给出的。系统会根据入场价、止损距离、单笔风险预算和组合风险上限计算建议仓位。
+
+### 6. 自动邮件简报与提醒
+
+系统支持两类输出：
+
+- 每日简报：在设定的悉尼时间窗口发送股票池总览和重点交易计划
+- 机会提醒：在美股正常交易时段内，如果信号达到阈值，发送入场、加仓或风险提醒
+
+每类提醒都有冷却机制，避免同一信号反复刷屏。
+
+### 7. 免费数据优先，支持降级
+
+当前数据源以免费来源为主：
+
+- Yahoo Finance: 行情、基本面、期权链
+- NVIDIA RSS / Google News RSS: 新闻和公开标题情绪
+- 本地缓存: 当实时数据失败时尝试降级使用缓存
+
+如果 Yahoo、RSS 或期权数据临时不可用，系统会尽量生成带有数据降级提示的报告，而不是直接中断。
+
+### 8. 可测试、可维护、可扩展
+
+项目已从单文件脚本升级为模块化结构：
+
+```text
+shortreport/
+  config.py       # 环境变量与配置
+  data.py         # 数据获取、缓存、降级
+  indicators.py   # RSI、MACD、ATR、ADX 等指标
+  market.py       # 市场环境过滤
+  signals.py      # 信号评分与交易计划
+  risk.py         # 仓位与组合风险控制
+  reporting.py    # 日报与提醒内容
+  state.py        # 状态记录与迁移
+  backtest.py     # 简易回测框架
+  runner.py       # 主运行流程
+```
+
+并包含测试覆盖：
+
+- 技术指标测试
+- 风控计算测试
+- 状态迁移测试
+- 数据降级测试
+- 报告字段测试
+- 信号评分测试
+- 简易回测测试
+
+## 信号类型
+
+ShortReport 当前支持以下信号：
+
+- `突破入场`: 趋势、动量、量能和市场背景共同支持突破
+- `趋势回踩加仓`: 强趋势中回踩关键均线附近，适合分批加仓
+- `持有观察`: 分数尚可，但不适合新增仓位
+- `减仓/风险升高`: 过热、转弱或风险条件恶化
+- `禁止交易/等待`: 数据不足、市场不利或信号不清晰
 
 ## 环境变量
 
-必需邮件配置：
+### 邮件配置
 
-- `SMTP_USER`
-- `SMTP_APP_PASSWORD`
-- `FROM_EMAIL`
-- `TO_EMAIL`
+```text
+SMTP_USER
+SMTP_APP_PASSWORD
+FROM_EMAIL
+TO_EMAIL
+```
 
-股票池与调度：
+### 股票池与调度
 
-- `SYMBOLS`: 默认 `NVDA`，示例 `NVDA,MSFT,AMD,SMH,QQQ`
-- `MARKET_SYMBOLS`: 默认 `SPY,QQQ,SMH,^VIX`
-- `SEND_HOUR`: 默认 `7`
-- `SEND_MINUTE`: 默认 `30`
-- `SEND_WINDOW_MINUTES`: 默认 `10`
-- `ENABLE_ENTRY_ALERTS`: 默认 `true`
-- `ALERT_COOLDOWN_HOURS`: 默认 `12`
-- `ALERT_SCORE_THRESHOLD`: 默认 `65`
-- `INTRADAY_INTERVAL`: 默认 `30m`
-- `SUBJECT_PREFIX`: 邮件标题前缀
-- `DRY_RUN`: 默认 `false`
+```text
+SYMBOLS=NVDA,MSFT,AMD,SMH,QQQ
+MARKET_SYMBOLS=SPY,QQQ,SMH,^VIX
+SEND_HOUR=7
+SEND_MINUTE=30
+SEND_WINDOW_MINUTES=10
+ENABLE_ENTRY_ALERTS=true
+ALERT_COOLDOWN_HOURS=12
+ALERT_SCORE_THRESHOLD=65
+INTRADAY_INTERVAL=30m
+SUBJECT_PREFIX=ShortReport 量化简报
+DRY_RUN=false
+```
 
-风控：
+### 风控参数
 
-- `ACCOUNT_EQUITY`: 可选账户规模；未设置时只输出百分比仓位
-- `RISK_PER_TRADE_PCT`: 默认 `0.5`
-- `MAX_POSITION_PCT`: 默认 `10`
-- `PORTFOLIO_HEAT_MAX_PCT`: 默认 `3`
-- `ATR_STOP_MULTIPLIER`: 默认 `2.0`
-- `MIN_RR`: 默认 `1.5`
+```text
+ACCOUNT_EQUITY=
+RISK_PER_TRADE_PCT=0.5
+MAX_POSITION_PCT=10
+PORTFOLIO_HEAT_MAX_PCT=3
+ATR_STOP_MULTIPLIER=2.0
+MIN_RR=1.5
+```
+
+`ACCOUNT_EQUITY` 是可选项。如果不设置，系统只输出百分比仓位，不输出具体金额。
 
 ## 本地运行
 
+安装依赖：
+
 ```powershell
 python -m pip install -r requirements.txt
+```
+
+干跑模式：
+
+```powershell
 $env:DRY_RUN="true"
 python report.py
 ```
 
-## Frontend 宣传页
-
-静态宣传页位于 `frontend/index.html`，默认英文显示，并支持 English / 中文切换。
-
-```powershell
-Start-Process .\frontend\index.html
-```
-
-该页面用于对外展示 ShortReport 的系统能力、工作流、交易计划样例、风控参数和版本状态。页面不依赖前端构建工具，可直接部署到 GitHub Pages 或任意静态托管服务。
-
-## 测试
+运行测试：
 
 ```powershell
 python -m compileall report.py shortreport tests
 pytest
 ```
 
-## 数据源
+## GitHub Actions
 
-- Yahoo Finance: 行情、基本面、期权链
-- NVIDIA RSS、Google News RSS: 新闻与公开标题情绪
-- 本地缓存目录: `.cache/shortreport`
+项目内置 GitHub Actions workflow：
 
-提示：免费数据源可能延迟、缺失或被限流。系统会降级输出，但交易决策仍应人工复核。
+- 每 20 分钟自动运行
+- 只在早报时间窗口发送每日简报
+- 只在美股正常交易时段发送机会提醒
+- 支持手动 `workflow_dispatch`
+- 支持 dry-run
+- 只在状态文件变化时提交 `state/last_sent.json`
+
+## 适合谁使用
+
+ShortReport 适合：
+
+- 想系统化跟踪美股波段机会的交易者
+- 想把主观看盘流程变成可重复检查清单的人
+- 想在入场前明确止损、目标位和仓位的人
+- 想用免费数据源搭建轻量量化助手的人
+- 想学习如何把交易逻辑拆成数据、信号、风控和报告模块的人
+
+## 不适合谁使用
+
+ShortReport 不适合：
+
+- 想要自动下单机器人的用户
+- 想要高频交易或毫秒级行情系统的用户
+- 想要保证收益或确定性买卖点的用户
+- 不愿意人工复核交易计划的用户
 
 ## 免责声明
 
-本项目仅用于信息分析和交易辅助，不构成投资建议，不代表任何自动交易指令。
+ShortReport 仅用于信息分析和交易辅助，不构成投资建议，不代表任何自动交易指令。所有交易计划都需要人工复核，任何投资决策和交易风险均由使用者自行承担。
