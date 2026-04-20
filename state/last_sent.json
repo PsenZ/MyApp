@@ -2,11 +2,16 @@
   "alerts": {
     "NVDA": {
       "breakout_entry": {
-        "meta": {
-          "headline": "NVDA 突破型入场信号",
-          "score": 70
+        "plan": {
+          "entry_zone": "$202.09 - $203.35",
+          "max_loss_pct": 0.5,
+          "position_pct": 9.99,
+          "stop": "$192.58",
+          "targets": "$217.93 / $228.08"
         },
-        "sent_at": "2026-04-14T00:09:57.155444+10:00"
+        "score": 89,
+        "sent_at": "2026-04-21T05:58:08.165102+10:00",
+        "signal_hash": "f6fcd2b6c184"
       },
       "pullback_add": {
         "meta": {
