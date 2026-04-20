@@ -1,7 +1,7 @@
-import pandas as pd
+﻿import pandas as pd
 
-from shortreport.config import AppConfig, SmtpConfig
-from shortreport.data import DataClient, headline_sentiment_score
+from veyraquant.config import AppConfig, SmtpConfig
+from veyraquant.data import DataClient, headline_sentiment_score
 
 
 def make_config(tmp_path):

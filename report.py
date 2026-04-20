@@ -1,7 +1,7 @@
-import sys
+﻿import sys
 
-from shortreport.config import AppConfig
-from shortreport.runner import run
+from veyraquant.config import AppConfig
+from veyraquant.runner import run
 
 
 def main() -> int:

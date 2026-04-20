@@ -1,8 +1,8 @@
-# ShortReport 量化交易助手
+﻿# VeyraQuant 量化交易助手
 
-ShortReport 是一个面向美股波段交易的半自动量化交易助手。它会定时扫描股票池，结合行情、技术指标、市场环境、新闻情绪、期权数据和风控预算，生成每日简报、机会提醒和可复核的交易计划。
+VeyraQuant 是一个面向美股波段交易的半自动量化交易助手。它会定时扫描股票池，结合行情、技术指标、市场环境、新闻情绪、期权数据和风控预算，生成每日简报、机会提醒和可复核的交易计划。
 
-它不是自动交易机器人，也不会连接券商 API。ShortReport 的目标是帮助交易者更快回答三个问题：
+它不是自动交易机器人，也不会连接券商 API。VeyraQuant 的目标是帮助交易者更快回答三个问题：
 
 - 现在市场环境是否适合进攻？
 - 哪些标的最值得关注？
@@ -22,7 +22,7 @@ NVDA,MSFT,AMD,SMH,QQQ
 
 ### 2. 市场环境过滤
 
-ShortReport 不会只看个股信号。它会先读取市场背景：
+VeyraQuant 不会只看个股信号。它会先读取市场背景：
 
 - `SPY`: 美股大盘风险偏好
 - `QQQ`: 科技股趋势
@@ -48,7 +48,7 @@ ShortReport 不会只看个股信号。它会先读取市场背景：
 
 ### 4. 明确交易计划
 
-当信号达到条件时，ShortReport 会输出完整交易计划：
+当信号达到条件时，VeyraQuant 会输出完整交易计划：
 
 - 信号类型
 - 综合评分
@@ -80,7 +80,7 @@ max_loss_pct: 0.50%
 
 ### 5. 风控优先
 
-ShortReport 默认采用保守风险参数：
+VeyraQuant 默认采用保守风险参数：
 
 - 单笔风险：`0.5%`
 - 单标的最大仓位：`10%`
@@ -114,7 +114,7 @@ ShortReport 默认采用保守风险参数：
 项目已从单文件脚本升级为模块化结构：
 
 ```text
-shortreport/
+veyraquant/
   config.py       # 环境变量与配置
   data.py         # 数据获取、缓存、降级
   indicators.py   # RSI、MACD、ATR、ADX 等指标
@@ -139,7 +139,7 @@ shortreport/
 
 ## 信号类型
 
-ShortReport 当前支持以下信号：
+VeyraQuant 当前支持以下信号：
 
 - `突破入场`: 趋势、动量、量能和市场背景共同支持突破
 - `趋势回踩加仓`: 强趋势中回踩关键均线附近，适合分批加仓
@@ -170,7 +170,7 @@ ENABLE_ENTRY_ALERTS=true
 ALERT_COOLDOWN_HOURS=12
 ALERT_SCORE_THRESHOLD=65
 INTRADAY_INTERVAL=30m
-SUBJECT_PREFIX=ShortReport 量化简报
+SUBJECT_PREFIX=VeyraQuant 量化简报
 DRY_RUN=false
 ```
 
@@ -205,7 +205,7 @@ python report.py
 运行测试：
 
 ```powershell
-python -m compileall report.py shortreport tests
+python -m compileall report.py veyraquant tests
 pytest
 ```
 
@@ -222,7 +222,7 @@ pytest
 
 ## 适合谁使用
 
-ShortReport 适合：
+VeyraQuant 适合：
 
 - 想系统化跟踪美股波段机会的交易者
 - 想把主观看盘流程变成可重复检查清单的人
@@ -232,7 +232,7 @@ ShortReport 适合：
 
 ## 不适合谁使用
 
-ShortReport 不适合：
+VeyraQuant 不适合：
 
 - 想要自动下单机器人的用户
 - 想要高频交易或毫秒级行情系统的用户
@@ -241,4 +241,4 @@ ShortReport 不适合：
 
 ## 免责声明
 
-ShortReport 仅用于信息分析和交易辅助，不构成投资建议，不代表任何自动交易指令。所有交易计划都需要人工复核，任何投资决策和交易风险均由使用者自行承担。
+VeyraQuant 仅用于信息分析和交易辅助，不构成投资建议，不代表任何自动交易指令。所有交易计划都需要人工复核，任何投资决策和交易风险均由使用者自行承担。

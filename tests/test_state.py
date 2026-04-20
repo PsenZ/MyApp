@@ -1,6 +1,6 @@
-from datetime import datetime, timedelta, timezone
+﻿from datetime import datetime, timedelta, timezone
 
-from shortreport.state import (
+from veyraquant.state import (
     STATE_VERSION,
     alert_in_cooldown,
     mark_alert_sent,

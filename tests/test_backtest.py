@@ -1,8 +1,8 @@
-import numpy as np
+﻿import numpy as np
 import pandas as pd
 
-from shortreport.backtest import run_backtest
-from shortreport.config import AppConfig, SmtpConfig
+from veyraquant.backtest import run_backtest
+from veyraquant.config import AppConfig, SmtpConfig
 
 
 def make_config():

@@ -1,4 +1,4 @@
-name: ShortReport Quant Brief And Alerts
+﻿name: VeyraQuant Brief And Alerts
 
 on:
   schedule:
@@ -14,7 +14,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: shortreport-${{ github.ref }}
+  group: veyraquant-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -32,7 +32,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          python -m compileall report.py shortreport
+          python -m compileall report.py veyraquant
 
       - name: Run report
         env:
@@ -55,7 +55,7 @@ jobs:
           PORTFOLIO_HEAT_MAX_PCT: "3"
           ATR_STOP_MULTIPLIER: "2.0"
           MIN_RR: "1.5"
-          SUBJECT_PREFIX: "ShortReport 量化简报"
+          SUBJECT_PREFIX: "VeyraQuant 量化简报"
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
           python report.py

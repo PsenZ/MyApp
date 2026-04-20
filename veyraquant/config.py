@@ -1,4 +1,4 @@
-import os
+﻿import os
 from dataclasses import dataclass
 from typing import Optional
 
@@ -75,7 +75,7 @@ class AppConfig:
         account_equity_raw = os.getenv("ACCOUNT_EQUITY")
         account_equity = float(account_equity_raw) if account_equity_raw else None
         subject_default = (
-            f"{symbols[0]} 每日简报" if len(symbols) == 1 else "ShortReport 量化简报"
+            f"{symbols[0]} 每日简报" if len(symbols) == 1 else "VeyraQuant 量化简报"
         )
 
         return cls(
@@ -85,7 +85,7 @@ class AppConfig:
             send_minute=_int_env("SEND_MINUTE", 30),
             send_window_minutes=_int_env("SEND_WINDOW_MINUTES", 10),
             state_path=os.getenv("STATE_PATH", os.path.join("state", "last_sent.json")),
-            cache_dir=os.getenv("CACHE_DIR", os.path.join(".cache", "shortreport")),
+            cache_dir=os.getenv("CACHE_DIR", os.path.join(".cache", "veyraquant")),
             subject_prefix=os.getenv("SUBJECT_PREFIX", subject_default),
             entry_alerts_enabled=_bool_env("ENABLE_ENTRY_ALERTS", True),
             alert_cooldown_hours=_int_env("ALERT_COOLDOWN_HOURS", 12),

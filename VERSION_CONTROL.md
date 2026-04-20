@@ -1,10 +1,10 @@
-# Version Control
+﻿# Version Control
 
 ## Current Version
 
-- Version: `2.1.0`
+- Version: `2.2.0`
 - Date: `2026-04-20`
-- Status: Added bilingual public frontend page
+- Status: Renamed project from ShortReport to VeyraQuant
 
 ## Versioning Rules
 
@@ -13,6 +13,12 @@
 - `PATCH`: bug fix, test improvement, copy update, or operational hardening with no decision-model change.
 
 ## Changelog
+
+### 2.2.0
+
+- Renamed the project from `ShortReport` to `VeyraQuant`.
+- Renamed the Python package from `shortreport` to `veyraquant`.
+- Updated public-facing docs, frontend branding, workflow compile paths, and tests.
 
 ### 2.1.0
 

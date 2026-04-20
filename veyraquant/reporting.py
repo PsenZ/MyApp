@@ -1,4 +1,4 @@
-from datetime import datetime
+﻿from datetime import datetime
 
 from .config import AppConfig
 from .models import MarketContext, SignalResult
@@ -28,7 +28,7 @@ def compose_daily_report(
 ) -> tuple[str, str]:
     subject = f"{config.subject_prefix} - {now_dt.strftime('%Y-%m-%d')}"
     lines: list[str] = [
-        f"ShortReport 股票池量化简报 ({now_dt.strftime('%Y-%m-%d %H:%M')} Sydney)",
+        f"VeyraQuant 股票池量化简报 ({now_dt.strftime('%Y-%m-%d %H:%M')} Sydney)",
         "",
         "[市场过滤]",
         f"市场状态: {market.label} (score {market.score:+.1f})",

@@ -1,7 +1,7 @@
-import numpy as np
+﻿import numpy as np
 import pandas as pd
 
-from shortreport.indicators import adx, atr, bollinger_bands, macd, rsi, volume_ratio
+from veyraquant.indicators import adx, atr, bollinger_bands, macd, rsi, volume_ratio
 
 
 def test_indicators_return_aligned_series():

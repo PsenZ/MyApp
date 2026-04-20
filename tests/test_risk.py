@@ -1,4 +1,4 @@
-from shortreport.risk import portfolio_heat_cap, position_size_pct
+﻿from veyraquant.risk import portfolio_heat_cap, position_size_pct
 
 
 def test_position_size_respects_max_position_and_risk():

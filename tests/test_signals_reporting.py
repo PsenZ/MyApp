@@ -1,12 +1,12 @@
-import numpy as np
+﻿import numpy as np
 import pandas as pd
 
-from shortreport.config import AppConfig, SmtpConfig
-from shortreport.market import build_market_context
-from shortreport.models import FundamentalsData, NewsBundle
-from shortreport.reporting import compose_daily_report
-from shortreport.signals import analyze_symbol, assign_ranks, enforce_portfolio_heat
-from shortreport.timeutils import SYDNEY_TZ
+from veyraquant.config import AppConfig, SmtpConfig
+from veyraquant.market import build_market_context
+from veyraquant.models import FundamentalsData, NewsBundle
+from veyraquant.reporting import compose_daily_report
+from veyraquant.signals import analyze_symbol, assign_ranks, enforce_portfolio_heat
+from veyraquant.timeutils import SYDNEY_TZ
 from datetime import datetime
 
 

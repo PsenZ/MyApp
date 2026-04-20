@@ -1,7 +1,7 @@
-const translations = {
+﻿const translations = {
   en: {
     "meta.description":
-      "ShortReport is a semi-automated quant trading assistant for auditable signals, risk controls, and trade plans.",
+      "VeyraQuant is a semi-automated quant trading assistant for auditable signals, risk controls, and trade plans.",
     "hero.imageAlt": "Trading screens with market data",
     "workflow.imageAlt": "Data dashboard with analytics",
     "version.imageAlt": "Financial planning notes and calculator",
@@ -12,7 +12,7 @@ const translations = {
     "hero.eyebrow": "Semi-automated quant trading assistant",
     "hero.title": "Signals, risk, and plans before every trade.",
     "hero.copy":
-      "ShortReport generates auditable stock-pool rankings, market filters, component scores, and trade plans for swing trading.",
+      "VeyraQuant generates auditable stock-pool rankings, market filters, component scores, and trade plans for swing trading.",
     "hero.primaryCta": "View trade plan",
     "hero.secondaryCta": "Understand risk controls",
     "intro.data.title": "Data first",
@@ -79,7 +79,7 @@ const translations = {
     "risk.item5": "Minimum reward/risk",
     "architecture.eyebrow": "Architecture",
     "architecture.title": "Testable, traceable, and ready to iterate",
-    "version.eyebrow": "Version 2.1.0",
+    "version.eyebrow": "Version 2.2.0",
     "version.title": "Prepared for presentation and deployment",
     "version.copy":
       "The current release adds the public-facing page and leaves room for historical signal visualization, backtest reports, and data quality monitoring.",
@@ -88,7 +88,7 @@ const translations = {
   },
   zh: {
     "meta.description":
-      "ShortReport 是面向美股波段交易的半自动量化交易助手，输出可审计的信号、风控和交易计划。",
+      "VeyraQuant 是面向美股波段交易的半自动量化交易助手，输出可审计的信号、风控和交易计划。",
     "hero.imageAlt": "显示市场数据的交易屏幕",
     "workflow.imageAlt": "数据分析仪表盘",
     "version.imageAlt": "财务计划笔记与计算器",
@@ -99,7 +99,7 @@ const translations = {
     "hero.eyebrow": "半自动量化交易助手",
     "hero.title": "每次交易之前，先看信号、风险与计划。",
     "hero.copy":
-      "ShortReport 为美股波段交易生成可审计的股票池排序、市场过滤、分项评分和交易计划。",
+      "VeyraQuant 为美股波段交易生成可审计的股票池排序、市场过滤、分项评分和交易计划。",
     "hero.primaryCta": "查看交易计划",
     "hero.secondaryCta": "理解风控框架",
     "intro.data.title": "数据先行",
@@ -159,7 +159,7 @@ const translations = {
     "risk.item5": "最低盈亏比",
     "architecture.eyebrow": "Architecture",
     "architecture.title": "可测试、可追踪、可迭代",
-    "version.eyebrow": "Version 2.1.0",
+    "version.eyebrow": "Version 2.2.0",
     "version.title": "为展示和部署准备",
     "version.copy":
       "当前版本加入对外宣传页面，保留后续扩展到历史信号可视化、回测报告页面和数据质量监控的空间。",
