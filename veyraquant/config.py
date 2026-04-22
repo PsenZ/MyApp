@@ -83,7 +83,7 @@ class AppConfig:
             market_symbols=market_symbols,
             send_hour=_int_env("SEND_HOUR", 7),
             send_minute=_int_env("SEND_MINUTE", 30),
-            send_window_minutes=_int_env("SEND_WINDOW_MINUTES", 10),
+            send_window_minutes=_int_env("SEND_WINDOW_MINUTES", 30),
             state_path=os.getenv("STATE_PATH", os.path.join("state", "last_sent.json")),
             cache_dir=os.getenv("CACHE_DIR", os.path.join(".cache", "veyraquant")),
             subject_prefix=os.getenv("SUBJECT_PREFIX", subject_default),
