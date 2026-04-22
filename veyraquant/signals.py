@@ -30,6 +30,8 @@ def tech_summary(hist: pd.DataFrame) -> TechSnapshot:
     chg = last - prev
     chg_pct = chg / prev * 100
 
+    sma5_series = close.rolling(5).mean()
+    sma10_series = close.rolling(10).mean()
     sma20_series = close.rolling(20).mean()
     sma50_series = close.rolling(50).mean()
     sma200_series = close.rolling(200).mean()
@@ -39,15 +41,21 @@ def tech_summary(hist: pd.DataFrame) -> TechSnapshot:
     atr14_series = atr(high, low, close)
     plus_di, minus_di, adx_series = adx(high, low, close)
     vol_ratio_series = volume_ratio(volume)
+    vol_ratio_5_series = volume / (volume.rolling(5).mean() + 1e-9)
+    daily_range = (high.iloc[-1] - low.iloc[-1]) + 1e-9
 
     values = {
         "last": last,
         "prev": prev,
         "chg": chg,
         "chg_pct": chg_pct,
+        "sma5": float(sma5_series.iloc[-1]),
+        "sma10": float(sma10_series.iloc[-1]),
         "sma20": float(sma20_series.iloc[-1]),
         "sma50": float(sma50_series.iloc[-1]),
         "sma200": float(sma200_series.iloc[-1]) if len(close) >= 200 else float("nan"),
+        "sma5_prev": float(sma5_series.iloc[-2]),
+        "sma10_prev": float(sma10_series.iloc[-2]),
         "sma20_prev": float(sma20_series.iloc[-2]),
         "sma50_prev": float(sma50_series.iloc[-2]),
         "rsi14": float(rsi_series.iloc[-1]),
@@ -70,8 +78,12 @@ def tech_summary(hist: pd.DataFrame) -> TechSnapshot:
         "minus_di": float(minus_di.iloc[-1]),
         "adx14": float(adx_series.iloc[-1]),
         "vol_ratio": float(vol_ratio_series.iloc[-1]),
+        "vol_ratio_5": float(vol_ratio_5_series.iloc[-1]),
         "perf20": pct_change(close, 20),
         "perf55": pct_change(close, 55),
+        "close_position": float((last - low.iloc[-1]) / daily_range),
+        "dist_ma5_pct": float((last - sma5_series.iloc[-1]) / (sma5_series.iloc[-1] + 1e-9) * 100),
+        "dist_ma10_pct": float((last - sma10_series.iloc[-1]) / (sma10_series.iloc[-1] + 1e-9) * 100),
     }
     return TechSnapshot(values)
 
@@ -136,13 +148,20 @@ def analyze_symbol(
     raw_score = sum(contributions.values())
     score = int(max(0, min(100, round(raw_score))))
 
-    signal_type, alert_kind = choose_signal_type(tech, intraday_data, score, market, config)
+    signal_type, alert_kind = choose_signal_type(tech, intraday_data, score, market, news, config)
     plan = build_trade_plan(signal_type, tech, config)
     if plan.rr < config.min_rr and plan.position_pct > 0:
         risks.append(f"盈亏比 {plan.rr:.2f} 低于最低要求 {config.min_rr:.2f}")
         if signal_type in {"突破入场", "趋势回踩加仓"}:
             signal_type = "持有观察"
             alert_kind = "hold_watch"
+
+    if signal_type in {"突破入场", "趋势回踩加仓"} and news.social_sentiment.get("score", 0.0) <= -max(
+        config.social_sentiment_threshold, 0.2
+    ):
+        risks.append("舆情链路偏空，触发利空过滤，买入信号降级为等待")
+        signal_type = "禁止交易/等待"
+        alert_kind = "wait"
 
     if warnings:
         risks.extend(warnings[:3])
@@ -178,6 +197,9 @@ def score_components(
     risks: list[str] = []
 
     trend = 0.0
+    if t["sma5"] >= t["sma10"] >= t["sma20"]:
+        trend += 10
+        reasons.append("MA5/MA10/MA20 多头排列，符合趋势策略优先条件")
     if t["last"] > t["sma20"] > t["sma50"]:
         trend += 18
         reasons.append("价格站上 SMA20 与 SMA50，短中期趋势保持多头结构")
@@ -233,12 +255,18 @@ def score_components(
     contributions["relative_strength"] = relative
 
     volume = 0.0
-    if t["vol_ratio"] >= 1.5:
+    if t["vol_ratio_5"] >= 2.0:
+        volume += 12
+        reasons.append("当日量能超过 5 日均量的 2 倍，突破效率较高")
+    elif t["vol_ratio"] >= 1.5:
         volume += 10
         reasons.append("成交量显著高于 20 日均量，信号确认度较高")
     elif t["vol_ratio"] >= 1.1:
         volume += 5
         reasons.append("成交量温和放大")
+    elif t["vol_ratio_5"] < 0.7:
+        volume += 4
+        reasons.append("回调阶段量能低于 5 日均量的 70%，更接近缩量回踩节奏")
     elif t["vol_ratio"] < 0.7:
         volume -= 4
         risks.append("成交量低于均量，突破确认度不足")
@@ -275,6 +303,29 @@ def score_components(
         sentiment += 2
     contributions["news_sentiment"] = sentiment
 
+    discipline = 0.0
+    if t["dist_ma5_pct"] > 5:
+        discipline -= 8
+        risks.append("价格相对 MA5 乖离过大，存在追高风险")
+    elif 0 <= t["dist_ma5_pct"] <= 2:
+        discipline += 4
+        reasons.append("价格距离 MA5 不远，入场节奏更健康")
+    if abs(t["dist_ma10_pct"]) <= 2:
+        discipline += 3
+        reasons.append("价格贴近 MA10，回踩支撑区更清晰")
+    contributions["discipline"] = discipline
+
+    sector = 0.0
+    smh_perf = _snapshot_perf(market, "SMH")
+    qqq_perf = _snapshot_perf(market, "QQQ")
+    if symbol in {"NVDA", "AMD", "MU", "SMH"} and not math.isnan(smh_perf) and smh_perf > 0:
+        sector += 4
+        reasons.append("半导体板块保持强势，板块共振有利于个股延续")
+    if symbol in {"NVDA", "TSLA", "AAPL", "QQQ"} and not math.isnan(qqq_perf) and qqq_perf > 0:
+        sector += 3
+        reasons.append("科技成长方向未明显转弱，提升顺势交易胜率")
+    contributions["sector_resonance"] = sector
+
     event_risk = 0.0
     recommendation = fundamentals.recommendation_key
     if recommendation in {"buy", "strong_buy"}:
@@ -304,19 +355,36 @@ def choose_signal_type(
     intraday: Optional[dict[str, float]],
     score: int,
     market: MarketContext,
+    news: NewsBundle,
     config: AppConfig,
 ) -> tuple[str, str]:
     t = tech.values
-    breakout = t["last"] >= t["high_20"] * 0.995
-    pullback_distance = abs(t["last"] - t["sma20"]) / (t["atr14"] + 1e-9)
-    pullback = t["last"] > t["sma20"] and pullback_distance <= 0.9 and 42 <= t["rsi14"] <= 62
+    ma_stack = t["sma5"] >= t["sma10"] >= t["sma20"]
+    breakout = (
+        ma_stack
+        and t["last"] >= t["high_20"] * 0.995
+        and t["vol_ratio_5"] >= 2.0
+        and t["close_position"] >= 0.7
+        and t["dist_ma5_pct"] <= 5
+    )
+    pullback_ma5 = ma_stack and abs(t["dist_ma5_pct"]) <= 1.0
+    pullback_ma10 = ma_stack and abs(t["dist_ma10_pct"]) <= 2.0
+    pullback = (
+        t["last"] > t["sma20"]
+        and (pullback_ma5 or pullback_ma10)
+        and t["vol_ratio_5"] <= 0.7
+        and 42 <= t["rsi14"] <= 62
+    )
     intraday_breakout = bool(
         intraday
         and intraday["price"] >= intraday["high_13"] * 0.998
-        and intraday["vol_ratio"] >= 1.15
+        and intraday["vol_ratio"] >= 2.0
     )
+    negative_news = news.social_sentiment.get("score", 0.0) <= -max(config.social_sentiment_threshold, 0.2)
 
     if market.label == "风险规避" and score < config.alert_score_threshold + 5:
+        return "禁止交易/等待", "wait"
+    if negative_news and score < config.alert_score_threshold + 10:
         return "禁止交易/等待", "wait"
     if score >= config.alert_score_threshold and (breakout or intraday_breakout):
         return "突破入场", "breakout_entry"

@@ -1,4 +1,4 @@
-﻿from datetime import datetime
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 
@@ -17,6 +17,12 @@ def now_us_eastern() -> datetime:
 def within_send_window(now_dt: datetime, hour: int, minute: int, window_minutes: int) -> bool:
     target = now_dt.replace(hour=hour, minute=minute, second=0, microsecond=0)
     return abs((now_dt - target).total_seconds()) <= window_minutes * 60
+
+
+def daily_report_due(now_dt: datetime, hour: int, minute: int, window_minutes: int) -> bool:
+    target = now_dt.replace(hour=hour, minute=minute, second=0, microsecond=0)
+    earliest = target - timedelta(minutes=window_minutes)
+    return now_dt >= earliest
 
 
 def is_regular_us_market_hours(now_dt_et: datetime) -> bool:

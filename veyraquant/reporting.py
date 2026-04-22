@@ -1,7 +1,8 @@
-﻿from datetime import datetime
+from datetime import datetime
 
 from .config import AppConfig
 from .models import MarketContext, SignalResult
+from .timeutils import US_EASTERN_TZ
 
 
 def format_money(value) -> str:
@@ -20,6 +21,14 @@ def format_money(value) -> str:
     return f"{value:.2f}"
 
 
+def format_dual_time(now_dt: datetime) -> str:
+    eastern_dt = now_dt.astimezone(US_EASTERN_TZ)
+    return (
+        f"Sydney {now_dt.strftime('%Y-%m-%d %H:%M')} / "
+        f"US Eastern {eastern_dt.strftime('%Y-%m-%d %H:%M')}"
+    )
+
+
 def compose_daily_report(
     results: list[SignalResult],
     market: MarketContext,
@@ -27,8 +36,9 @@ def compose_daily_report(
     now_dt: datetime,
 ) -> tuple[str, str]:
     subject = f"{config.subject_prefix} - {now_dt.strftime('%Y-%m-%d')}"
+    dual_time = format_dual_time(now_dt)
     lines: list[str] = [
-        f"VeyraQuant 股票池量化简报 ({now_dt.strftime('%Y-%m-%d %H:%M')} Sydney)",
+        f"VeyraQuant 股票池量化简报 ({dual_time})",
         "",
         "[市场过滤]",
         f"市场状态: {market.label} (score {market.score:+.1f})",
@@ -74,8 +84,9 @@ def compose_daily_report(
 
 def compose_alert_email(result: SignalResult, now_dt: datetime) -> tuple[str, str]:
     subject = f"{result.symbol} {result.signal_type} - score {result.score}"
+    dual_time = format_dual_time(now_dt)
     lines = [
-        f"{result.symbol} 机会/风险提醒 ({now_dt.strftime('%Y-%m-%d %H:%M')} Sydney)",
+        f"{result.symbol} 机会/风险提醒 ({dual_time})",
         "",
         f"rank: {result.rank}",
         f"symbol: {result.symbol}",

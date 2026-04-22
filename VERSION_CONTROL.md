@@ -2,9 +2,9 @@
 
 ## Current Version
 
-- Version: `2.2.0`
+- Version: `2.3.0`
 - Date: `2026-04-20`
-- Status: Renamed project from ShortReport to VeyraQuant
+- Status: Upgraded strategy engine and US watchlist
 
 ## Versioning Rules
 
@@ -13,6 +13,14 @@
 - `PATCH`: bug fix, test improvement, copy update, or operational hardening with no decision-model change.
 
 ## Changelog
+
+### 2.3.0
+
+- Upgraded the scoring engine with stricter trend-following rules inspired by bull-trend, shrink-pullback, and volume-breakout evaluation ideas.
+- Added MA5/MA10/MA20 alignment, anti-chase deviation checks, shrink-volume pullback preference, heavy-volume breakout confirmation, sector resonance, and stronger negative-news veto logic.
+- Updated the active US watchlist to `NVDA,TSLA,AAPL,AMD,MU,QQQ,SMH`.
+- Kept daily brief delivery more reliable by widening the schedule window and allowing same-day catch-up sending.
+- Added dual timezone display for Sydney and US Eastern in reports and alerts.
 
 ### 2.2.0
 

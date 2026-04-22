@@ -15,7 +15,7 @@ VeyraQuant 是一个面向美股波段交易的半自动量化交易助手。它
 通过 `SYMBOLS` 配置多个美股或 ETF，例如：
 
 ```text
-NVDA,MSFT,AMD,SMH,QQQ
+NVDA,TSLA,AAPL,AMD,MU,QQQ,SMH
 ```
 
 系统会为每个标的计算综合评分，并按优先级排序，避免只盯着单一股票做主观判断。
@@ -35,14 +35,15 @@ VeyraQuant 不会只看个股信号。它会先读取市场背景：
 
 每个标的都会拆成多个可解释评分项：
 
-- 趋势结构：均线、20/55 日高低点
+- 趋势结构：MA5/MA10/MA20/MA50/MA200、20/55 日高低点
 - 动量状态：RSI、MACD、ADX、DI
 - 相对强弱：个股相对 `SPY` / `QQQ` 的表现
-- 成交量确认：当前量能相对 20 日均量
+- 成交量确认：当前量能相对 20 日均量与 5 日均量
 - 波动与期权：ATR、隐含波动率、Put/Call 比率
 - 新闻与情绪：公开 RSS、Google News、社媒标题代理情绪
 - 事件风险：基本面增长、分析师一致预期
 - 市场环境：大盘、科技、半导体、VIX 背景
+- 纪律过滤：乖离率不追高、利空消息一票否决、板块共振加分
 
 这样你看到的不只是一个分数，而是知道分数从哪里来。
 
@@ -78,6 +79,21 @@ position_pct: 6.40%
 max_loss_pct: 0.50%
 ```
 
+### 4.1 当前策略框架
+
+当前系统更接近“纪律化趋势波段策略助手”，核心逻辑是：
+
+- 市场先过滤：先判断 `risk-on / neutral / risk-off`
+- 个股再打分：优先多头排列、强趋势、量价配合
+- 买点偏好：优先缩量回踩，不鼓励高位追涨
+- 突破确认：要求放量、强势收盘、乖离率可控
+- 风险排查：舆情明显偏空时，买入信号会被降级或否决
+
+你现在实际采用的两类主交易机会是：
+
+- `突破入场`：接近/突破 20 日高点，且 5 日量比足够强、收盘位置强势
+- `趋势回踩加仓`：MA5 > MA10 > MA20，多头趋势中缩量回踩 MA5/MA10 附近
+
 ### 5. 风控优先
 
 VeyraQuant 默认采用保守风险参数：
@@ -95,6 +111,7 @@ VeyraQuant 默认采用保守风险参数：
 系统支持两类输出：
 
 - 每日简报：在设定的悉尼时间窗口发送股票池总览和重点交易计划
+- 每日简报：到达阈值时间后，当天任意一次成功运行都会补发一次，避免因 GitHub Actions 延迟漏掉整天日报
 - 机会提醒：在美股正常交易时段内，如果信号达到阈值，发送入场、加仓或风险提醒
 
 每类提醒都有冷却机制，避免同一信号反复刷屏。
@@ -161,11 +178,11 @@ TO_EMAIL
 ### 股票池与调度
 
 ```text
-SYMBOLS=NVDA,MSFT,AMD,SMH,QQQ
+SYMBOLS=NVDA,TSLA,AAPL,AMD,MU,QQQ,SMH
 MARKET_SYMBOLS=SPY,QQQ,SMH,^VIX
 SEND_HOUR=7
 SEND_MINUTE=30
-SEND_WINDOW_MINUTES=10
+SEND_WINDOW_MINUTES=30
 ENABLE_ENTRY_ALERTS=true
 ALERT_COOLDOWN_HOURS=12
 ALERT_SCORE_THRESHOLD=65
@@ -214,7 +231,7 @@ pytest
 项目内置 GitHub Actions workflow：
 
 - 每 20 分钟自动运行
-- 只在早报时间窗口发送每日简报
+- 到达发送阈值后，当天任意一次成功运行都会补发每日简报
 - 只在美股正常交易时段发送机会提醒
 - 支持手动 `workflow_dispatch`
 - 支持 dry-run

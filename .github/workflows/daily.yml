@@ -40,11 +40,11 @@ jobs:
           SMTP_APP_PASSWORD: ${{ secrets.SMTP_APP_PASSWORD }}
           FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
           TO_EMAIL: ${{ secrets.TO_EMAIL }}
-          SYMBOLS: "NVDA,MSFT,AMD,SMH,QQQ"
+          SYMBOLS: "NVDA,TSLA,AAPL,AMD,MU,QQQ,SMH"
           MARKET_SYMBOLS: "SPY,QQQ,SMH,^VIX"
           SEND_HOUR: "7"
           SEND_MINUTE: "30"
-          SEND_WINDOW_MINUTES: "10"
+          SEND_WINDOW_MINUTES: "30"
           ENABLE_ENTRY_ALERTS: "true"
           ALERT_COOLDOWN_HOURS: "12"
           ALERT_SCORE_THRESHOLD: "65"

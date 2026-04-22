@@ -25,7 +25,7 @@ def _int_env(name: str, default: int) -> int:
 
 
 def _symbols_from_env() -> list[str]:
-    raw = os.getenv("SYMBOLS") or os.getenv("SYMBOL") or "NVDA"
+    raw = os.getenv("SYMBOLS") or os.getenv("SYMBOL") or "NVDA,TSLA,AAPL,AMD,MU,QQQ,SMH"
     symbols = [part.strip().upper() for part in raw.split(",") if part.strip()]
     return symbols or ["NVDA"]
 

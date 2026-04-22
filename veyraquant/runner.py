@@ -1,4 +1,4 @@
-﻿from .config import AppConfig
+from .config import AppConfig
 from .data import DataClient
 from .emailer import send_email
 from .market import build_market_context
@@ -13,19 +13,19 @@ from .state import (
     read_state,
     write_state,
 )
-from .timeutils import is_regular_us_market_hours, now_sydney, now_us_eastern, within_send_window
+from .timeutils import daily_report_due, is_regular_us_market_hours, now_sydney, now_us_eastern
 
 
 def run(config: AppConfig | None = None) -> int:
     config = config or AppConfig.from_env()
     now_dt = now_sydney()
     state = read_state(config.state_path)
-    daily_due = within_send_window(
+    daily_due = daily_report_due(
         now_dt, config.send_hour, config.send_minute, config.send_window_minutes
     ) and not already_sent_daily(state, now_dt)
     alerts_due = config.entry_alerts_enabled and is_regular_us_market_hours(now_us_eastern())
     if not daily_due and not alerts_due:
-        print("Daily report skipped: not in send window or already sent today.")
+        print("Daily report skipped: before send threshold or already sent today.")
         print("Entry alerts skipped: outside regular US market hours or disabled.")
         print("Nothing sent; state unchanged.")
         return 0
@@ -76,8 +76,8 @@ def build_results(symbol_data_items: list[SymbolData], market, config: AppConfig
 
 
 def maybe_send_daily_report(state, now_dt, results, market, config: AppConfig) -> bool:
-    if not within_send_window(now_dt, config.send_hour, config.send_minute, config.send_window_minutes):
-        print("Daily report skipped: not in send window.")
+    if not daily_report_due(now_dt, config.send_hour, config.send_minute, config.send_window_minutes):
+        print("Daily report skipped: before send threshold.")
         return False
     if already_sent_daily(state, now_dt):
         print("Daily report skipped: already sent today.")
