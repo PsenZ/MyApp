@@ -9,6 +9,10 @@ on:
         description: "Run without sending email or updating state"
         required: false
         default: "false"
+      force_send:
+        description: "Force-send a daily brief without waiting for the send window"
+        required: false
+        default: "false"
 
 permissions:
   contents: write
@@ -57,6 +61,7 @@ jobs:
           MIN_RR: "1.5"
           SUBJECT_PREFIX: "VeyraQuant 量化简报"
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          FORCE_DAILY_REPORT: ${{ github.event.inputs.force_send || 'false' }}
         run: |
           python report.py
 

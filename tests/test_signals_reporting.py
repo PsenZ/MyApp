@@ -31,6 +31,7 @@ def make_config():
         portfolio_heat_max_pct=0.6,
         atr_stop_multiplier=2,
         min_rr=1.5,
+        force_daily_report=False,
         dry_run=True,
         smtp=SmtpConfig("smtp.test", 465, None, None, None, None),
     )

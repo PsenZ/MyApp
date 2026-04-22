@@ -2,9 +2,9 @@
 
 ## Current Version
 
-- Version: `2.3.0`
+- Version: `2.3.1`
 - Date: `2026-04-20`
-- Status: Upgraded strategy engine and US watchlist
+- Status: Added manual force-send support for daily briefs
 
 ## Versioning Rules
 
@@ -13,6 +13,12 @@
 - `PATCH`: bug fix, test improvement, copy update, or operational hardening with no decision-model change.
 
 ## Changelog
+
+### 2.3.1
+
+- Added `FORCE_DAILY_REPORT` support so manual workflow runs can send a daily brief immediately without waiting for the normal send window.
+- Added a `force_send` input to the GitHub Actions `workflow_dispatch` trigger.
+- Kept forced manual briefs from overwriting the official daily-send state, so scheduled daily delivery still works later the same day.
 
 ### 2.3.0
 

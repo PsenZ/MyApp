@@ -189,6 +189,7 @@ ALERT_SCORE_THRESHOLD=65
 INTRADAY_INTERVAL=30m
 SUBJECT_PREFIX=VeyraQuant 量化简报
 DRY_RUN=false
+FORCE_DAILY_REPORT=false
 ```
 
 ### 风控参数
@@ -235,6 +236,7 @@ pytest
 - 只在美股正常交易时段发送机会提醒
 - 支持手动 `workflow_dispatch`
 - 支持 dry-run
+- 支持 `force_send=true` 的手动强制日报测试，不受时间窗口限制，且不会覆盖当天正式日报状态
 - 只在状态文件变化时提交 `state/last_sent.json`
 
 ## 适合谁使用

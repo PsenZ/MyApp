@@ -61,6 +61,7 @@ class AppConfig:
     portfolio_heat_max_pct: float
     atr_stop_multiplier: float
     min_rr: float
+    force_daily_report: bool
     dry_run: bool
     smtp: SmtpConfig
 
@@ -98,6 +99,7 @@ class AppConfig:
             portfolio_heat_max_pct=_float_env("PORTFOLIO_HEAT_MAX_PCT", 3.0),
             atr_stop_multiplier=_float_env("ATR_STOP_MULTIPLIER", 2.0),
             min_rr=_float_env("MIN_RR", 1.5),
+            force_daily_report=_bool_env("FORCE_DAILY_REPORT", False),
             dry_run=_bool_env("DRY_RUN", False),
             smtp=SmtpConfig(
                 host=os.getenv("SMTP_HOST", "smtp.mail.yahoo.com"),
