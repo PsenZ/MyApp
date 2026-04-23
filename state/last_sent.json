@@ -80,15 +80,15 @@
     "TSLA": {
       "pullback_add": {
         "plan": {
-          "entry_zone": "$365.99 - $373.41",
-          "max_loss_pct": 0.22,
-          "position_pct": 2.74,
-          "stop": "$339.99",
-          "targets": "$414.26 / $443.97"
+          "entry_zone": "$365.58 - $373.06",
+          "max_loss_pct": 0.5,
+          "position_pct": 6.17,
+          "stop": "$339.40",
+          "targets": "$414.20 / $444.11"
         },
-        "score": 91,
-        "sent_at": "2026-04-23T00:54:29.361538+10:00",
-        "signal_hash": "9fcad8b50af5"
+        "score": 100,
+        "sent_at": "2026-04-23T23:48:14.351184+10:00",
+        "signal_hash": "eeca68d5fb2c"
       }
     }
   },
