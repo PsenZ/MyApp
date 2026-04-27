@@ -2,16 +2,18 @@
   "alerts": {
     "AAPL": {
       "pullback_add": {
+        "channel": "entry",
         "plan": {
-          "entry_zone": "$259.99 - $262.92",
+          "entry_zone": "$260.88 - $263.83",
           "max_loss_pct": 0.45,
           "position_pct": 10.0,
-          "stop": "$249.76",
-          "targets": "$279.00 / $290.70"
+          "stop": "$250.58",
+          "targets": "$280.02 / $291.80"
         },
+        "reason": "signal_changed",
         "score": 100,
-        "sent_at": "2026-04-25T00:43:18.588611+10:00",
-        "signal_hash": "bcdaed18dac2"
+        "sent_at": "2026-04-27T23:49:11.876548+10:00",
+        "signal_hash": "6d511308c220"
       }
     },
     "AMD": {
@@ -42,18 +44,36 @@
         "signal_hash": "42cda0aa6c7f"
       }
     },
+    "MU": {
+      "breakout_entry": {
+        "channel": "entry",
+        "plan": {
+          "entry_zone": "$521.06 - $527.66",
+          "max_loss_pct": 0.5,
+          "position_pct": 4.97,
+          "stop": "$471.58",
+          "targets": "$603.53 / $656.30"
+        },
+        "reason": "new_alert",
+        "score": 100,
+        "sent_at": "2026-04-27T23:49:11.876548+10:00",
+        "signal_hash": "50632d0cbedc"
+      }
+    },
     "NVDA": {
       "breakout_entry": {
+        "channel": "entry",
         "plan": {
-          "entry_zone": "$201.93 - $203.14",
-          "max_loss_pct": 0.48,
-          "position_pct": 10.0,
-          "stop": "$192.84",
-          "targets": "$217.08 / $226.78"
+          "entry_zone": "$210.38 - $211.71",
+          "max_loss_pct": 0.5,
+          "position_pct": 9.91,
+          "stop": "$200.40",
+          "targets": "$227.02 / $237.66"
         },
-        "score": 88,
-        "sent_at": "2026-04-22T00:10:29.747798+10:00",
-        "signal_hash": "9f87ad2099c5"
+        "reason": "signal_changed",
+        "score": 100,
+        "sent_at": "2026-04-27T23:49:11.876548+10:00",
+        "signal_hash": "ec02c14fc8d4"
       },
       "pullback_add": {
         "meta": {
