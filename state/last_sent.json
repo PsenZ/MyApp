@@ -4,16 +4,16 @@
       "pullback_add": {
         "channel": "entry",
         "plan": {
-          "entry_zone": "$260.86 - $263.80",
+          "entry_zone": "$260.83 - $263.78",
           "max_loss_pct": 0.45,
           "position_pct": 10.0,
-          "stop": "$250.55",
-          "targets": "$280.00 / $291.77"
+          "stop": "$250.53",
+          "targets": "$279.97 / $291.75"
         },
         "reason": "signal_changed",
         "score": 100,
-        "sent_at": "2026-04-28T00:36:08.639625+10:00",
-        "signal_hash": "8fc960b48114"
+        "sent_at": "2026-04-28T02:11:59.995602+10:00",
+        "signal_hash": "f101c686c081"
       }
     },
     "AMD": {
