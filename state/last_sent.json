@@ -1,6 +1,20 @@
 {
   "alerts": {
     "AAPL": {
+      "breakout_entry": {
+        "channel": "entry",
+        "plan": {
+          "entry_zone": "$269.92 - $271.39",
+          "max_loss_pct": 0.43,
+          "position_pct": 10.0,
+          "stop": "$258.92",
+          "targets": "$288.26 / $300.00"
+        },
+        "reason": "new_alert",
+        "score": 100,
+        "sent_at": "2026-04-28T23:55:08.714942+10:00",
+        "signal_hash": "6dda96eb0d4a"
+      },
       "pullback_add": {
         "channel": "entry",
         "plan": {
