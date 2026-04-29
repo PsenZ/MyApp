@@ -18,7 +18,7 @@
       "pullback_add": {
         "channel": "entry",
         "plan": {
-          "entry_zone": "$262.92 - $265.78",
+          "entry_zone": "$262.92 - $265.79",
           "max_loss_pct": 0.43,
           "position_pct": 10.0,
           "stop": "$252.88",
@@ -26,8 +26,8 @@
         },
         "reason": "signal_changed",
         "score": 100,
-        "sent_at": "2026-04-30T04:09:48.202391+10:00",
-        "signal_hash": "9b38456ad420"
+        "sent_at": "2026-04-30T05:55:20.319433+10:00",
+        "signal_hash": "ed2ac7e8f0bb"
       }
     },
     "AMD": {
