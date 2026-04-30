@@ -106,16 +106,18 @@
     },
     "QQQ": {
       "breakout_entry": {
+        "channel": "entry",
         "plan": {
-          "entry_zone": "$649.54 - $652.06",
-          "max_loss_pct": 0.31,
+          "entry_zone": "$667.78 - $670.26",
+          "max_loss_pct": 0.3,
           "position_pct": 10.0,
-          "stop": "$630.65",
-          "targets": "$681.02 / $701.17"
+          "stop": "$649.12",
+          "targets": "$698.86 / $718.76"
         },
-        "score": 98,
-        "sent_at": "2026-04-22T00:10:29.747798+10:00",
-        "signal_hash": "170eccecb9cd"
+        "reason": "signal_changed",
+        "score": 100,
+        "sent_at": "2026-05-01T05:51:27.791928+10:00",
+        "signal_hash": "073243cd4968"
       }
     },
     "SMH": {
