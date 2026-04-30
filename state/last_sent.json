@@ -90,11 +90,18 @@
         "signal_hash": "ec02c14fc8d4"
       },
       "pullback_add": {
-        "meta": {
-          "headline": "NVDA 趋势回踩加仓信号",
-          "score": 65
+        "channel": "entry",
+        "plan": {
+          "entry_zone": "$194.72 - $197.88",
+          "max_loss_pct": 0.5,
+          "position_pct": 7.78,
+          "stop": "$183.68",
+          "targets": "$215.23 / $227.85"
         },
-        "sent_at": "2026-04-10T00:16:34.561674+10:00"
+        "reason": "cooldown_elapsed",
+        "score": 100,
+        "sent_at": "2026-05-01T01:09:24.380269+10:00",
+        "signal_hash": "8f821ed2587b"
       }
     },
     "QQQ": {
