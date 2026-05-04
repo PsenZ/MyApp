@@ -18,16 +18,16 @@
       "pullback_add": {
         "channel": "entry",
         "plan": {
-          "entry_zone": "$265.61 - $268.88",
+          "entry_zone": "$265.59 - $268.86",
           "max_loss_pct": 0.49,
           "position_pct": 10.0,
-          "stop": "$254.16",
-          "targets": "$286.87 / $299.95"
+          "stop": "$254.14",
+          "targets": "$286.85 / $299.93"
         },
         "reason": "signal_changed",
         "score": 100,
-        "sent_at": "2026-05-05T00:32:58.736825+10:00",
-        "signal_hash": "4d77e1d89e18"
+        "sent_at": "2026-05-05T02:21:02.714170+10:00",
+        "signal_hash": "bb018d503c1f"
       }
     },
     "AMD": {
@@ -150,16 +150,18 @@
         "signal_hash": "64ed6e1ded7b"
       },
       "pullback_add": {
+        "channel": "entry",
         "plan": {
-          "entry_zone": "$365.34 - $372.80",
+          "entry_zone": "$370.82 - $377.95",
           "max_loss_pct": 0.5,
-          "position_pct": 6.18,
-          "stop": "$339.20",
-          "targets": "$413.88 / $443.75"
+          "position_pct": 6.56,
+          "stop": "$345.85",
+          "targets": "$417.19 / $445.73"
         },
+        "reason": "signal_changed",
         "score": 100,
-        "sent_at": "2026-04-25T00:43:18.588611+10:00",
-        "signal_hash": "2b8aedbfd894"
+        "sent_at": "2026-05-05T02:21:02.714170+10:00",
+        "signal_hash": "a666b8fcf24b"
       }
     }
   },
